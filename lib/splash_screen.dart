@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class Spalsh extends StatefulWidget {
+  const Spalsh({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<Spalsh> createState() => _SpalshState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SpalshState extends State<Spalsh> {
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 5),
+    Timer(Duration(seconds: 2),
         () => Navigator.pushReplacementNamed(context, 'Home'));
     return SafeArea(
       child: Scaffold(
@@ -26,13 +26,30 @@ class _SplashScreenState extends State<SplashScreen> {
                 Container(
                   height: 400,
                   width: 400,
-                  child: Image.asset("images/INVOICE.png"),
+                  child: Image.asset("assets/image/i.png"),
                 ),
                 SizedBox(
                   height: 60,
                 ),
                 CircularProgressIndicator(
-                  color: Colors.blueAccent,
+                  color: Colors.red.shade900,
+                ),
+                SizedBox(
+                  height: 115,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: Text(
+                    "From",
+                    style: TextStyle(color: Colors.black26, fontSize: 13),
+                  ),
+                ),
+                Text(
+                  "Jayraj",
+                  style: TextStyle(
+                      color: Colors.red.shade900,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 21),
                 ),
               ],
             ),

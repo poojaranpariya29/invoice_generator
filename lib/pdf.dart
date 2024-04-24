@@ -1,160 +1,189 @@
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
+import 'dart:io';
+
 import 'package:invoice_generator/util.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart';
-import 'package:printing/printing.dart';
+import 'package:pdf/widgets.dart' as pw;
 
-class PdfData {
-  PdfPreview getPdfPreview() {
-    return PdfPreview(build: (format) {
-      return getPdf();
-    });
-  }
-
-  Future<Uint8List> getPdf() async {
-    var document = Document();
-    final img = await rootBundle.load("images/INVOICE.png");
-    final imageBytes = img.buffer.asUint8List();
-    int amount = 0;
-    int gsttotal = 0;
-    int cesstotal = 0;
-    for (int i = 0; i < invoice.price.length; i++) {
-      amount += (int.tryParse(invoice.price[i]) ?? 0) *
-          (int.tryParse(invoice.quantity[i]) ?? 0);
-    }
-    for (int i = 0; i < invoice.gst.length; i++) {
-      gsttotal += int.tryParse(invoice.gst[i]) ?? 0;
-    }
-
-    int totals = amount + gsttotal + cesstotal;
-
-    document.addPage(Page(build: (context) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text("Bill To",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: "invoice Number  ",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ])))
-        ]),
-        SizedBox(height: 25),
-        Text("${invoice.name}", style: TextStyle(fontSize: 19)),
-        SizedBox(height: 5),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text("${invoice.address}", style: TextStyle(fontSize: 19)),
-        ]),
-        SizedBox(height: 5),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          RichText(
-              text: TextSpan(children: [
-            TextSpan(
-                text: "Due Date  ",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            TextSpan(
-                text: "${invoice.dueDate}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-          ]))
-        ]),
-        SizedBox(height: 5),
-        Container(
-            height: 60,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(7),
-                color: PdfColor.fromInt(0xff666666)),
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              SizedBox(width: 10),
-              Text("Item Name",
-                  style: TextStyle(color: PdfColors.white, fontSize: 15)),
-              SizedBox(width: 50),
-              Text("Quantity",
-                  style: TextStyle(color: PdfColors.white, fontSize: 15)),
-              SizedBox(width: 25),
-              Text("Rate",
-                  style: TextStyle(color: PdfColors.white, fontSize: 15)),
-              SizedBox(width: 25),
-              Text("CGST",
-                  style: TextStyle(color: PdfColors.white, fontSize: 15)),
-              SizedBox(width: 25),
-              Text("price",
-                  style: TextStyle(color: PdfColors.white, fontSize: 15)),
-              SizedBox(width: 25),
-              Text("Amount",
-                  style: TextStyle(color: PdfColors.white, fontSize: 15)),
-            ])),
-        SizedBox(height: 10),
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SizedBox(width: 10),
-          Column(children: [
-            for (int i = 0; i < invoice.items.length; i++)
-              Text("${invoice.items[i]}", style: TextStyle(fontSize: 18)),
-          ]),
-          SizedBox(width: 90),
-          Column(children: [
-            for (int i = 0; i < invoice.quantity.length; i++)
-              Text("${invoice.quantity[i]}", style: TextStyle(fontSize: 18)),
-          ]),
-          SizedBox(width: 50),
-          Column(children: [
-            for (int i = 0; i < invoice.price.length; i++)
-              Text("${invoice.price[i]}", style: TextStyle(fontSize: 18)),
-          ]),
-          SizedBox(width: 25),
-          Column(children: [
-            for (int i = 0; i < invoice.price.length; i++)
-              Text("5.00", style: TextStyle(fontSize: 20)),
-          ]),
-          SizedBox(width: 20),
-          Column(children: [
-            for (int i = 0; i < invoice.price.length; i++)
-              Text("20.00", style: TextStyle(fontSize: 20)),
-          ]),
-          SizedBox(width: 40),
-          Column(
-            children: [
-              for (int i = 0; i < invoice.price.length; i++)
-                Text(
-                    "${(int.tryParse(invoice.price[i]) ?? 0) * (int.tryParse(invoice.quantity[i]) ?? 0)}",
-                    style: TextStyle(fontSize: 20)),
-            ],
-          ),
-        ]),
-        Padding(
-            padding: EdgeInsets.only(left: 280, top: 20),
-            child: Column(children: [
-              Row(children: [
-                SizedBox(width: 45),
-                Text("CGST ", style: TextStyle(fontSize: 20)),
-                SizedBox(width: 30),
-                Column(
+void PDF(DataModal data) async {
+  final pdf = pw.Document();
+  final image = pw.MemoryImage(
+    File('${data.logo_path}').readAsBytesSync(),
+  );
+  pdf.addPage(pw.Page(
+    pageFormat: PdfPageFormat.a4,
+    margin: pw.EdgeInsets.all(10),
+    build: (context) {
+      return pw.Stack(children: [
+        pw.Column(children: [
+          pw.Container(
+              height: 150,
+              width: double.infinity,
+              color: PdfColors.red,
+              child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      "${gsttotal}.00",
-                      style: TextStyle(fontSize: 18),
+                    pw.Padding(
+                      padding: pw.EdgeInsets.only(right: 115),
+                      child: pw.Container(
+                          height: 85,
+                          width: 85,
+                          decoration: pw.BoxDecoration(
+                              color: PdfColors.white,
+                              border: pw.Border.all(
+                                  color: PdfColors.black, width: 3)),
+                          alignment: pw.Alignment.center,
+                          child: pw.Image(image, fit: pw.BoxFit.fill)),
                     ),
-                  ],
+                    pw.Padding(
+                        padding: pw.EdgeInsets.only(right: 30),
+                        child: pw.Text(
+                            "From To : ${data.bf_name}\nAddress : ${data.bf_add}",
+                            style: pw.TextStyle(
+                                color: PdfColors.white, fontSize: 12)))
+                  ])),
+          pw.Padding(
+              padding: pw.EdgeInsets.only(top: 8),
+              child: pw.Container(
+                  width: double.infinity, height: 7, color: PdfColors.black)),
+          pw.Row(children: [
+            pw.Padding(
+                padding: pw.EdgeInsets.only(top: 50, left: 21),
+                child: pw.Text(
+                    "Bill To    : ${data.bt_name}\nAddress : ${data.bt_add}",
+                    style: pw.TextStyle(color: PdfColors.black, fontSize: 13))),
+            pw.Padding(
+                padding: pw.EdgeInsets.only(top: 50, left: 150),
+                child: pw.Text(
+                    "Invoice No :        ${data.in_num}\nFirst Date  :        ${data.f_date}\nDue Date   :        ${data.due_date}",
+                    style: pw.TextStyle(color: PdfColors.black, fontSize: 13))),
+          ]),
+          pw.Padding(
+              padding: pw.EdgeInsets.only(top: 30, left: 35, right: 45),
+              child: pw.Container(
+                  height: 21,
+                  width: double.infinity,
+                  color: PdfColors.red,
+                  alignment: pw.Alignment.centerLeft,
+                  child: pw.Row(children: [
+                    pw.SizedBox(width: 10),
+                    pw.Text("Item",
+                        style: pw.TextStyle(
+                          color: PdfColors.white,
+                          fontSize: 15,
+                        )),
+                    pw.SizedBox(width: 190),
+                    pw.Text("Quantity",
+                        style: pw.TextStyle(
+                          color: PdfColors.white,
+                          fontSize: 15,
+                        )),
+                    pw.SizedBox(width: 65),
+                    pw.Text("Price",
+                        style: pw.TextStyle(
+                          color: PdfColors.white,
+                          fontSize: 15,
+                        )),
+                    pw.SizedBox(width: 65),
+                    pw.Text("Total",
+                        style: pw.TextStyle(
+                          color: PdfColors.white,
+                          fontSize: 15,
+                        )),
+                  ]))),
+          pw.Column(
+            children: data.items!
+                .asMap()
+                .entries
+                .map(
+                  (e) => pw.Padding(
+                      padding: pw.EdgeInsets.only(top: 15, left: 35, right: 45),
+                      child: pw.Row(children: [
+                        pw.SizedBox(width: 10),
+                        pw.Text("${data.items![e.key]}",
+                            style: pw.TextStyle(
+                              color: PdfColors.black,
+                              fontSize: 10,
+                            )),
+                        pw.SizedBox(width: 208),
+                        pw.Text("${data.prices![e.key]}",
+                            style: pw.TextStyle(
+                              color: PdfColors.black,
+                              fontSize: 10,
+                            )),
+                        pw.SizedBox(width: 97),
+                        pw.Text("Rs. ${data.quntitys![e.key]}",
+                            style: pw.TextStyle(
+                              color: PdfColors.black,
+                              fontSize: 10,
+                            )),
+                        pw.SizedBox(width: 70),
+                        pw.Text("Rs. ${data.totals![e.key]}",
+                            style: pw.TextStyle(
+                              color: PdfColors.black,
+                              fontSize: 10,
+                            )),
+                      ])),
                 )
-              ]),
-              SizedBox(height: 20),
-              Padding(
-                  padding: EdgeInsets.only(left: 45),
-                  child: Row(children: [
-                    Text("Total", style: TextStyle(fontSize: 20)),
-                    SizedBox(width: 50),
-                    Text("${totals}.00",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold))
-                  ]))
-            ]))
+                .toList(),
+          ),
+          pw.Padding(
+              padding: pw.EdgeInsets.only(top: 21, left: 35, right: 45),
+              child: pw.Container(
+                  width: double.infinity, height: 1, color: PdfColors.black)),
+          pw.Padding(
+              padding: pw.EdgeInsets.only(top: 15, left: 335, right: 45),
+              child: pw.Text("TOTAL :         Rs. ${data.total}",
+                  style: pw.TextStyle(
+                      color: PdfColors.black,
+                      fontSize: 15,
+                      fontWeight: pw.FontWeight.bold)))
+          // pw.Column(
+          //     children: [
+          //       pw.Padding(
+          //           padding: pw.EdgeInsets.only(top: 50,left: 120),
+          //           child: pw.Text(
+          //               "Bill To : Jayraj\nAddress : Surat",
+          //               style: pw.TextStyle(
+          //                   color: PdfColors.black,
+          //                   fontSize: 13
+          //               )
+          //           )
+          //       ),
+          //       pw.Padding(
+          //           padding: pw.EdgeInsets.only(top: 50,left: 120),
+          //           child: pw.Text(
+          //               "Invoice Number :                 123",
+          //               style: pw.TextStyle(
+          //                   color: PdfColors.black,
+          //                   fontSize: 13
+          //               )
+          //           )
+          //       ),
+          //     ]
+          // )
+        ]),
+        pw.Padding(
+            padding: pw.EdgeInsets.only(top: 121, left: 230),
+            child: pw.Container(
+                height: 40,
+                width: 115,
+                color: PdfColors.black,
+                alignment: pw.Alignment.center,
+                child: pw.Text("INVOICE",
+                    style:
+                        pw.TextStyle(color: PdfColors.white, fontSize: 18)))),
+        pw.Padding(
+            padding: pw.EdgeInsets.only(
+              top: 815,
+            ),
+            child: pw.Container(
+                width: double.infinity, height: 5, color: PdfColors.red)),
       ]);
-    }));
-
-    return document.save();
-  }
+    },
+  ));
+  Directory? d1 = await getExternalStorageDirectory();
+  print("=============>>> Path ===  ${d1!.path}");
+  File file = File("${d1!.path}/invoice.pdf");
+  await file.writeAsBytes(await pdf.save());
 }
