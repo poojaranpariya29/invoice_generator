@@ -17,13 +17,12 @@ class _PreviewState extends State<Preview> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            "Your Invoice",
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.red,
-        ),
+            title: Text(
+              "Invoice",
+              style: TextStyle(color: Colors.black),
+            ),
+            centerTitle: true,
+            backgroundColor: Color(0xff4EA09E)),
         body: Stack(
           children: [
             Column(
@@ -31,7 +30,7 @@ class _PreviewState extends State<Preview> {
                 Container(
                   height: 150,
                   width: double.infinity,
-                  color: Colors.red,
+                  color: Color(0xff4EA09E),
                   child: Row(
                     children: [
                       Padding(
@@ -49,10 +48,10 @@ class _PreviewState extends State<Preview> {
                               ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 121),
+                        padding: EdgeInsets.only(left: 115),
                         child: Text(
                           "From To : ${data.bf_name}\nAddress : ${data.bf_add}",
-                          style: TextStyle(color: Colors.white, fontSize: 8),
+                          style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       )
                     ],
@@ -71,17 +70,17 @@ class _PreviewState extends State<Preview> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Bill To : ${data.bt_name}\nAddress : ${data.bt_add}",
-                          style: TextStyle(color: Colors.black, fontSize: 8),
+                          style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 100, top: 20),
+                      padding: EdgeInsets.only(left: 60, top: 20),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Invoice No   : ${data.in_num}\nFirst Date     : ${data.f_date}\nDue Data      : ${data.due_date}",
-                          style: TextStyle(color: Colors.black, fontSize: 8),
+                          style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                       ),
                     )
@@ -90,9 +89,9 @@ class _PreviewState extends State<Preview> {
                 Padding(
                   padding: EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: Container(
-                    height: 12,
+                    height: 20,
                     width: double.infinity,
-                    color: Colors.red,
+                    color: Colors.black,
                     child: Row(
                       children: [
                         Padding(
@@ -101,25 +100,25 @@ class _PreviewState extends State<Preview> {
                           ),
                           child: Text(
                             "Items",
-                            style: TextStyle(color: Colors.white, fontSize: 6),
+                            style: TextStyle(color: Colors.white, fontSize: 10),
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 160,
+                            left: 90,
                           ),
                           child: Text(
                             "Quantity",
-                            style: TextStyle(color: Colors.white, fontSize: 6),
+                            style: TextStyle(color: Colors.white, fontSize: 10),
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 50,
+                            left: 30,
                           ),
                           child: Text(
                             "Price",
-                            style: TextStyle(color: Colors.white, fontSize: 6),
+                            style: TextStyle(color: Colors.white, fontSize: 10),
                           ),
                         ),
                         Padding(
@@ -128,7 +127,7 @@ class _PreviewState extends State<Preview> {
                           ),
                           child: Text(
                             "Total",
-                            style: TextStyle(color: Colors.white, fontSize: 6),
+                            style: TextStyle(color: Colors.white, fontSize: 10),
                           ),
                         ),
                       ],
@@ -152,37 +151,37 @@ class _PreviewState extends State<Preview> {
                                 child: Text(
                                   "${data.items![e.key]}",
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 6),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                  left: 168,
+                                  left: 120,
                                 ),
                                 child: Text(
                                   "${data.quntitys![e.key]}",
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 6),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                  left: 58,
+                                  left: 30,
                                 ),
                                 child: Text(
                                   "Rs. ${data.prices![e.key]}",
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 6),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                  left: 45,
+                                  left: 30,
                                 ),
                                 child: Text(
                                   "Rs. ${data.totals![e.key]}",
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 6),
+                                      color: Colors.black, fontSize: 10),
                                 ),
                               ),
                             ],
@@ -200,33 +199,22 @@ class _PreviewState extends State<Preview> {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(top: 12, left: 215),
+                    padding: const EdgeInsets.only(top: 12, left: 180),
                     child: Text(
                       "TOTAL : Rs. ${data.total}",
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 8,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold),
                     )),
               ],
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 120, left: 140),
-              height: 30,
-              width: 115,
-              color: Colors.black,
-              alignment: Alignment.center,
-              child: Text(
-                "INVOICE",
-                style: TextStyle(color: Colors.white, fontSize: 15),
-              ),
             ),
             Align(
               alignment: AlignmentDirectional.bottomCenter,
               child: Container(
                 height: 9,
                 width: double.infinity,
-                color: Colors.red,
+                color: Color(0xff4EA09E),
               ),
             )
           ],

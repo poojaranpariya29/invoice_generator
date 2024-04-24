@@ -26,13 +26,13 @@ class _SpalshState extends State<Spalsh> {
                 Container(
                   height: 400,
                   width: 400,
-                  child: Image.asset("assets/image/i.png"),
+                  child: Image.asset("assets/image/invoicelogo.png"),
                 ),
                 SizedBox(
                   height: 60,
                 ),
                 CircularProgressIndicator(
-                  color: Colors.red.shade900,
+                  color: Color(0xff4EA09E),
                 ),
                 SizedBox(
                   height: 115,

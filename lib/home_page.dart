@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:invoice_generator/PDF.dart';
 import 'package:invoice_generator/util.dart';
 
 class Home extends StatefulWidget {
@@ -45,7 +44,7 @@ class _HomeState extends State<Home> {
               style: TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF555259)),
+                  color: Color(0xff4EA09E)),
             ),
           ),
           const SizedBox(
@@ -123,50 +122,13 @@ class _HomeState extends State<Home> {
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: const Text("Create Invoice Generator"),
+              title: const Text("Invoice Generator"),
               centerTitle: true,
-              backgroundColor: Colors.red,
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          txtI_Num.clear();
-                          txtI_BF_Add.clear();
-                          txtI_BF_Name.clear();
-                          txtI_BT_Add.clear();
-                          txtI_BT_Name.clear();
-                          txtI_Date.clear();
-                          txtI_Due_Date.clear();
-                          total = 0;
-                          item.clear();
-                          quantity.clear();
-                          price.clear();
-                          path = null;
-                        });
-                      },
-                      child: const Icon(
-                        Icons.refresh,
-                        color: Colors.white,
-                        size: 30,
-                      )),
-                )
-              ],
+              backgroundColor: Color(0xff4EA09E),
             ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 15, left: 15),
-                      child: Text(
-                        "INVOICE",
-                        style: TextStyle(color: Colors.black54, fontSize: 33),
-                      ),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 12, left: 12, top: 6),
                     child: TextFormField(
@@ -571,8 +533,9 @@ class _HomeState extends State<Home> {
                             )),
                         alignment: Alignment.center,
                         child: const Text(
-                          "+ Add To Item",
-                          style: TextStyle(color: Colors.red, fontSize: 21),
+                          "+ Add",
+                          style:
+                              TextStyle(color: Color(0xff4EA09E), fontSize: 21),
                         ),
                       ),
                     ),
@@ -596,23 +559,63 @@ class _HomeState extends State<Home> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          minimumSize: const Size(115, 60),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30))),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => menu(),
-                        );
-                      },
-                      child: const Text(
-                        "Submit",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xff4EA09E),
+                              minimumSize: const Size(115, 60),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => menu(),
+                            );
+                          },
+                          child: const Text(
+                            "Submit",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xff4EA09E),
+                              minimumSize: const Size(115, 60),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          onPressed: () {
+                            setState(() {
+                              txtI_Num.clear();
+                              txtI_BF_Add.clear();
+                              txtI_BF_Name.clear();
+                              txtI_BT_Add.clear();
+                              txtI_BT_Name.clear();
+                              txtI_Date.clear();
+                              txtI_Due_Date.clear();
+                              total = 0;
+                              item.clear();
+                              quantity.clear();
+                              price.clear();
+                              path = null;
+                            });
+                          },
+                          child: const Text(
+                            "Reset",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -630,156 +633,155 @@ class _HomeState extends State<Home> {
       content: Container(
         height: 350,
         width: 600,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Align(
+        child: Column(
+          children: [
+            const Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Item",
+                style: TextStyle(color: Colors.black, fontSize: 18),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Container(
+                height: 45,
+                alignment: Alignment.center,
+                child: TextFormField(
+                  controller: txtI_Item,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(7),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      hintText: "Ex.Mango"),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Invoice Item";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "Item",
+                  "Quantity",
                   style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Container(
-                  height: 45,
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: txtI_Item,
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(color: Colors.black54),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(7),
-                          borderSide: const BorderSide(color: Colors.black54),
-                        ),
-                        hintText: "Ex.Mango"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please Enter Invoice Item";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Quantity",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8),
-                child: Container(
-                  height: 45,
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: txtI_Quantity,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(color: Colors.black54),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(7),
-                          borderSide: const BorderSide(color: Colors.black54),
-                        ),
-                        hintText: "Ex.5"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please Enter Invoice Quantity";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Price",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Container(
-                  height: 45,
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: txtI_Price,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(color: Colors.black54),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(7),
-                          borderSide: const BorderSide(color: Colors.black54),
-                        ),
-                        hintText: "Ex.30"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please Enter Invoice Price";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 40),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {
-                    setState(() {
-                      total = 0;
-                      item.add(txtI_Item.text.toString());
-                      quantity.add(txtI_Quantity.text.toString());
-                      price.add(txtI_Price.text.toString());
-                      Total_Price.add(
-                          "${int.parse("${txtI_Quantity.text}") * int.parse("${txtI_Price.text}")}");
-                      print("$item");
-                      print("$quantity");
-                      print("$price");
-                      print("$Total_Price");
-                      for (int i = 0; i < price.length; i++) {
-                        total = total + int.parse("${Total_Price[i]}");
-                      }
-                      print(total);
-                      Navigator.pop(context);
-                      txtI_Item.clear();
-                      txtI_Quantity.clear();
-                      txtI_Price.clear();
-                    });
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Container(
+                height: 45,
+                alignment: Alignment.center,
+                child: TextFormField(
+                  controller: txtI_Quantity,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(7),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      hintText: "Ex.5"),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Invoice Quantity";
+                    } else {
+                      return null;
+                    }
                   },
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(color: Colors.white),
-                  ),
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Price",
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                height: 45,
+                alignment: Alignment.center,
+                child: TextFormField(
+                  controller: txtI_Price,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(7),
+                        borderSide: const BorderSide(color: Colors.black54),
+                      ),
+                      hintText: "Ex.30"),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Invoice Price";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 30),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xff4EA09E)),
+                onPressed: () {
+                  setState(() {
+                    total = 0;
+                    item.add(txtI_Item.text.toString());
+                    quantity.add(txtI_Quantity.text.toString());
+                    price.add(txtI_Price.text.toString());
+                    Total_Price.add(
+                        "${int.parse("${txtI_Quantity.text}") * int.parse("${txtI_Price.text}")}");
+                    print("$item");
+                    print("$quantity");
+                    print("$price");
+                    print("$Total_Price");
+                    for (int i = 0; i < price.length; i++) {
+                      total = total + int.parse("${Total_Price[i]}");
+                    }
+                    print(total);
+                    Navigator.pop(context);
+                    txtI_Item.clear();
+                    txtI_Quantity.clear();
+                    txtI_Price.clear();
+                  });
+                },
+                child: const Text(
+                  "Save",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -1089,7 +1091,6 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 DataModal d1 = DataModal(
                     in_num: txtI_Num.text.toString(),
-                    logo_path: path,
                     bf_name: txtI_BF_Name.text.toString(),
                     bf_add: txtI_BF_Add.text.toString(),
                     bt_name: txtI_BT_Name.text.toString(),
@@ -1102,23 +1103,7 @@ class _HomeState extends State<Home> {
                     quntitys: quantity,
                     totals: Total_Price);
                 if (valid.currentState!.validate()) {
-                  if (path != null) {
-                    Navigator.pushNamed(context, 'Preview', arguments: d1);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            "Download PDF(Path=>Storage/Android/data/com.example.invoice_generator/files)"),
-                        duration: Duration(seconds: 6),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Please Select Any Logo"),
-                        duration: Duration(seconds: 6),
-                      ),
-                    );
-                  }
+                  Navigator.pushNamed(context, 'Preview', arguments: d1);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -1130,55 +1115,37 @@ class _HomeState extends State<Home> {
               },
               label: const Text("Preview"),
               icon: const Icon(Icons.remove_red_eye_outlined),
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xff4EA09E),
             ),
             FloatingActionButton.extended(
-              onPressed: () {
-                DataModal d1 = DataModal(
-                    in_num: txtI_Num.text.toString(),
-                    logo_path: path,
-                    bf_name: txtI_BF_Name.text.toString(),
-                    bf_add: txtI_BF_Add.text.toString(),
-                    bt_name: txtI_BT_Name.text.toString(),
-                    bt_add: txtI_BT_Add.text.toString(),
-                    f_date: txtI_Date.text.toString(),
-                    due_date: txtI_Due_Date.text.toString(),
-                    total: total.toString(),
-                    items: item,
-                    prices: price,
-                    quntitys: quantity,
-                    totals: Total_Price);
-                if (valid.currentState!.validate()) {
-                  if (path != null) {
-                    PDF(d1);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            "Download PDF(Path=>Storage/Android/data/com.example.invoice_generator/files)"),
-                        duration: Duration(seconds: 6),
-                      ),
-                    );
+                onPressed: () {
+                  DataModal d1 = DataModal(
+                      in_num: txtI_Num.text.toString(),
+                      bf_name: txtI_BF_Name.text.toString(),
+                      bf_add: txtI_BF_Add.text.toString(),
+                      bt_name: txtI_BT_Name.text.toString(),
+                      bt_add: txtI_BT_Add.text.toString(),
+                      f_date: txtI_Date.text.toString(),
+                      due_date: txtI_Due_Date.text.toString(),
+                      total: total.toString(),
+                      items: item,
+                      prices: price,
+                      quntitys: quantity,
+                      totals: Total_Price);
+                  if (valid.currentState!.validate()) {
+                    Navigator.pushNamed(context, 'pdf', arguments: d1);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("Please Select Any Logo"),
+                        content: Text("Please Fill All Detail"),
                         duration: Duration(seconds: 6),
                       ),
                     );
                   }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please Fill All Detail"),
-                      duration: Duration(seconds: 6),
-                    ),
-                  );
-                }
-              },
-              label: const Text("Download PDF"),
-              icon: const Icon(Icons.download),
-              backgroundColor: Colors.red,
-            ),
+                },
+                label: const Text("PDF"),
+                icon: const Icon(Icons.download),
+                backgroundColor: Color(0xff4EA09E)),
           ],
         ),
       ),
