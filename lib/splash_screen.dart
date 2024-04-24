@@ -11,7 +11,7 @@ class Spalsh extends StatefulWidget {
 class _SpalshState extends State<Spalsh> {
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 2),
+    Timer(Duration(seconds: 15),
         () => Navigator.pushReplacementNamed(context, 'Home'));
     return SafeArea(
       child: Scaffold(
@@ -45,7 +45,7 @@ class _SpalshState extends State<Spalsh> {
                   ),
                 ),
                 Text(
-                  "Jayraj",
+                  "pooja",
                   style: TextStyle(
                       color: Colors.red.shade900,
                       fontWeight: FontWeight.bold,
